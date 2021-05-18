@@ -29,7 +29,9 @@ jupyter notebook notebooks/ssd_notebook.ipynb
 
 ## Datasets
 
-The current version only supports Pascal VOC datasets (2007 and 2012). In order to be used for training a SSD model, the former need to be converted to TF-Records using the `tf_convert_data.py` script:
+The current version only supports Pascal VOC datasets (2007 and 2012).
+In order to be used for training a SSD model, the former need to be
+converted to TF-Records using the `tf_convert_data.py` script:
 ```bash
 DATASET_DIR=./VOC2007/test/
 OUTPUT_DIR=./tfrecords
@@ -38,7 +40,12 @@ python tf_convert_data.py \
     --dataset_dir=${DATASET_DIR} \
     --output_name=voc_2007_train \
     --output_dir=${OUTPUT_DIR}
+    说明：
+    1、手动创建tfrecords文件夹，不然运行会输出
+    2、在终端执行命令：python tf_convert_data.py  --dataset_name=pascalvoc  --dataset_dir=E:/DeepLearning/VOC2007/VOCdevkit/VOC2007/  --output_name=voc_2007_train  --output_dir=./tfrecords
 ```
+参考链接：[https://blog.csdn.net/weiyumeizi/article/details/82051855](https://blog.csdn.net/weiyumeizi/article/details/82051855)
+
 Note the previous command generated a collection of TF-Records instead of a single file in order to ease shuffling during training.
 
 ## Evaluation on Pascal VOC 2007
@@ -118,7 +125,6 @@ python eval_ssd_network.py \
     --batch_size=1 \
     --max_num_batches=500
 ```
-
 ### Fine-tuning a network trained on ImageNet
 
 One can also try to build a new SSD model based on standard architecture (VGG, ResNet, Inception, ...) and set up on top of it the `multibox` layers (with specific anchors, ratios, ...). For that purpose, you can fine-tune a network by only loading the weights of the original architecture, and initialize randomly the rest of network. For instance, in the case of the [VGG-16 architecture](http://download.tensorflow.org/models/vgg_16_2016_08_28.tar.gz), one can train a new model as following:
