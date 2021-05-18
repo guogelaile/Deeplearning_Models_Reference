@@ -45,8 +45,10 @@ python tf_convert_data.py \
     2、在终端执行命令：python tf_convert_data.py  --dataset_name=pascalvoc  --dataset_dir=E:/DeepLearning/VOC2007/VOCdevkit/VOC2007/  --output_name=voc_2007_train  --output_dir=./tfrecords
 ```
 参考链接：[https://blog.csdn.net/weiyumeizi/article/details/82051855](https://blog.csdn.net/weiyumeizi/article/details/82051855)
+[https://www.cnblogs.com/pprp/p/9552402.html](https://www.cnblogs.com/pprp/p/9552402.html)
 
-Note the previous command generated a collection of TF-Records instead of a single file in order to ease shuffling during training.
+Note the previous command generated a collection of TF-Records instead
+of a single file in order to ease shuffling during training.
 
 ## Evaluation on Pascal VOC 2007
 
@@ -73,7 +75,11 @@ python eval_ssd_network.py \
     --checkpoint_path=${CHECKPOINT_PATH} \
     --batch_size=1
 ```
-The evaluation script provides estimates on the recall-precision curve and compute the mAP metrics following the Pascal VOC 2007 and 2012 guidelines.
+运行出错参考链接：[https://blog.csdn.net/JH0lmes/article/details/82430844](https://blog.csdn.net/JH0lmes/article/details/82430844)
+
+The evaluation script provides estimates on the recall-precision curve
+and compute the mAP metrics following the Pascal VOC 2007 and 2012
+guidelines.
 
 In addition, if one wants to experiment/test a different Caffe SSD checkpoint, the former can be converted to TensorFlow checkpoints as following:
 ```sh
