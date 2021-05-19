@@ -17,7 +17,8 @@ pytorch版本（0.3）：[https://github.com/multimodallearning/pytorch-mask-rcn
 tensorflow版：[https://github.com/zhixuhao/unet](https://github.com/zhixuhao/unet)  
 pytorch版：[https://github.com/milesial/Pytorch-UNet](https://github.com/milesial/Pytorch-UNet)  
 
-**3、**
+**3、detectron2**  
+pytorch版：[https://github.com/facebookresearch/detectron2](https://github.com/facebookresearch/detectron2)  
 
 ## Annotation tool
 **1、labelme**  
