@@ -1,9 +1,24 @@
 ## Backbone networks
-1、 
+**vgg**  
 
-2、 
+**resnet**  
+
+**FCN**  
+
+**PSPNet**  
+
+**densenet**  
+
+**Squeezenet**  
+pytorch：[https://github.com/gsp-27/pytorch_Squeezenet](https://github.com/gsp-27/pytorch_Squeezenet)  
+tensorflow：[https://github.com/vonclites/squeezenet](https://github.com/vonclites/squeezenet)  
+keras：[https://github.com/rcmalli/keras-squeezenet](https://github.com/rcmalli/keras-squeezenet)  
 
 ## Object Detection Models
+**faster-rcnn**  
+tensorflow：[https://github.com/smallcorgi/Faster-RCNN_TF](https://github.com/smallcorgi/Faster-RCNN_TF)  
+pytorch：[https://github.com/longcw/faster_rcnn_pytorch](https://github.com/longcw/faster_rcnn_pytorch)  
+[https://github.com/ruotianluo/pytorch-faster-rcnn](https://github.com/ruotianluo/pytorch-faster-rcnn)  
 
 **Yolo-V5**  
 pytorch：[https://github.com/ultralytics/yolov5](https://github.com/ultralytics/yolov5)  
@@ -28,6 +43,9 @@ tensorlflow：[https://github.com/TowardsNorth/yolo_v1_tensorflow_guiyu](https:/
 **SSD**  
 pytorch：[https://github.com/lufficc/SSD](https://github.com/lufficc/SSD)  
 tensorflow：[https://github.com/balancap/SSD-Tensorflow](https://github.com/balancap/SSD-Tensorflow)  
+
+**nanodet**  
+pytorch：[https://github.com/RangiLyu/nanodet](https://github.com/RangiLyu/nanodet)  
 
 **KolektorSDD**  
 tensorflow（1.12）：[https://github.com/Wslsdx/Deep-Learning-Approach-for-Surface-Defect-Detection](https://github.com/Wslsdx/Deep-Learning-Approach-for-Surface-Defect-Detection)  
@@ -77,7 +95,7 @@ pytorch：[https://github.com/juntang-zhuang/LadderNet](https://github.com/junta
 **ShelfNet**  
 pytorch：[https://github.com/juntang-zhuang/ShelfNet](https://github.com/juntang-zhuang/ShelfNet)  
 
-**espnet**  
+**ESPNet**  
 pytorch：[https://github.com/espnet/espnet](https://github.com/espnet/espnet)  
 
 **ESPNetv2**  
@@ -107,6 +125,24 @@ tensorflow：[https://github.com/MaybeShewill-CV/bisenetv2-tensorflow](https://g
 **nnUNet**  
 pytorch：[https://github.com/MIC-DKFZ/nnUNet](https://github.com/MIC-DKFZ/nnUNet)  
 
+**linknet**  
+pytorch：[https://github.com/e-lab/pytorch-linknet](https://github.com/e-lab/pytorch-linknet)  
+
+**DABNet**  
+pytorch：[https://github.com/Reagan1311/DABNet](https://github.com/Reagan1311/DABNet)  
+
+**OCNet**  
+pytorch：[https://github.com/openseg-group/OCNet.pytorch](https://github.com/openseg-group/OCNet.pytorch)  
+
+**CCNet**  
+pytorch：[https://github.com/speedinghzl/CCNet](https://github.com/speedinghzl/CCNet)  
+
+**FastFCN**  
+pytorch：[https://github.com/wuhuikai/FastFCN](https://github.com/wuhuikai/FastFCN)  
+tensorflow：[https://github.com/srihari-humbarwadi/FastFCN_TF2.0](https://github.com/srihari-humbarwadi/FastFCN_TF2.0)  
+
+**DFANet**  
+pytorch：[https://github.com/huaifeng1993/DFANet](https://github.com/huaifeng1993/DFANet)  
 
 
 ## Annotation tool
