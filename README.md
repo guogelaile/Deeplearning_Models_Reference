@@ -14,7 +14,16 @@ pytorch：[https://github.com/gsp-27/pytorch_Squeezenet](https://github.com/gsp-
 tensorflow：[https://github.com/vonclites/squeezenet](https://github.com/vonclites/squeezenet)  
 keras：[https://github.com/rcmalli/keras-squeezenet](https://github.com/rcmalli/keras-squeezenet)  
 
-## Object Detection Models
+## Object Detection Models  
+**MobileNet**  
+tensorflow：[https://github.com/Zehaos/MobileNet](https://github.com/Zehaos/MobileNet)  
+
+**MobileNet-v3**  
+pytorch：[https://github.com/xiaolai-sqlai/mobilenetv3](https://github.com/xiaolai-sqlai/mobilenetv3)  
+
+**MobileNet-v2**  
+pytorch：[https://github.com/tonylins/pytorch-mobilenet-v2](https://github.com/tonylins/pytorch-mobilenet-v2)  
+
 **faster-rcnn**  
 tensorflow：[https://github.com/smallcorgi/Faster-RCNN_TF](https://github.com/smallcorgi/Faster-RCNN_TF)  
 pytorch：[https://github.com/longcw/faster_rcnn_pytorch](https://github.com/longcw/faster_rcnn_pytorch)  
