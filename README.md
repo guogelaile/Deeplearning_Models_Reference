@@ -27,10 +27,43 @@ pytorch版：[https://github.com/milesial/Pytorch-UNet](https://github.com/miles
 pytorch版：[https://github.com/facebookresearch/detectron2](https://github.com/facebookresearch/detectron2)  
 
 **deeplabv3**  
+tensorflow：[https://github.com/rishizek/tensorflow-deeplab-v3](https://github.com/rishizek/tensorflow-deeplab-v3)  
 pytorch：[https://github.com/fregu856/deeplabv3](https://github.com/fregu856/deeplabv3)  
 
 **deeplab-v3-plus**  
 tensorflow：[https://github.com/rishizek/tensorflow-deeplab-v3-plus](https://github.com/rishizek/tensorflow-deeplab-v3-plus)  
+pytorch：[https://github.com/VainF/DeepLabV3Plus-Pytorch](https://github.com/VainF/DeepLabV3Plus-Pytorch)
+
+**SegNet**  
+tensorflow（1.0）：[https://github.com/tkuanlun350/Tensorflow-SegNet](https://github.com/tkuanlun350/Tensorflow-SegNet)  
+pytorch：[https://github.com/delta-onera/segnet_pytorch](https://github.com/delta-onera/segnet_pytorch)  
+
+**LEDNet**  
+pytorch：[https://github.com/xiaoyufenfei/LEDNet](https://github.com/xiaoyufenfei/LEDNet)  
+
+**Fast-SCNN**  
+pytorch：[https://github.com/Tramac/Fast-SCNN-pytorch](https://github.com/Tramac/Fast-SCNN-pytorch)  
+
+**DSNet**  
+pytorch：[https://github.com/li-plus/DSNet](https://github.com/li-plus/DSNet)  
+
+**CGNet**  
+pytorch：[https://github.com/wutianyiRosun/CGNet](https://github.com/wutianyiRosun/CGNet)  
+
+**LadderNet**  
+pytorch：[https://github.com/juntang-zhuang/LadderNet](https://github.com/juntang-zhuang/LadderNet)  
+
+**ShelfNet**  
+pytorch：[https://github.com/juntang-zhuang/ShelfNet](https://github.com/juntang-zhuang/ShelfNet)  
+
+**espnet**  
+pytorch：[https://github.com/espnet/espnet](https://github.com/espnet/espnet)  
+
+**ESPNetv2**  
+pytorch：[https://github.com/sacmehta/ESPNetv2](https://github.com/sacmehta/ESPNetv2)  
+
+
+
 
 ## Annotation tool
 **1、labelme**  
