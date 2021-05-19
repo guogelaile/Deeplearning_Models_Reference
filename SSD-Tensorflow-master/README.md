@@ -75,6 +75,8 @@ python eval_ssd_network.py \
     --checkpoint_path=${CHECKPOINT_PATH} \
     --batch_size=1
 ```
+python eval_ssd_network.py  --eval_dir=./logs/  --dataset_dir=./tfrecords/  --dataset_name=pascalvoc_2007  --dataset_split_name=train  --model_name=ssd_300_vgg  --checkpoint_path=./checkpoints/VGG_VOC0712_SSD_300x300_iter_120000.ckpt   --batch_size=1
+
 运行出错参考链接：[https://blog.csdn.net/JH0lmes/article/details/82430844](https://blog.csdn.net/JH0lmes/article/details/82430844)
 
 The evaluation script provides estimates on the recall-precision curve
@@ -115,7 +117,13 @@ python train_ssd_network.py \
     --learning_rate=0.001 \
     --batch_size=32
 ```
-Note that in addition to the training script flags, one may also want to experiment with data augmentation parameters (random cropping, resolution, ...) in `ssd_vgg_preprocessing.py` or/and network parameters (feature layers, anchors boxes, ...) in `ssd_vgg_300/512.py`
+运行：  
+python train_ssd_network.py   --train_dir=./logs/  --dataset_dir=./tfrecords  --dataset_name=pascalvoc_2007  --dataset_split_name=train  --model_name=ssd_300_vgg  --checkpoint_path=./checkpoints/ssd_300_vgg.ckpt  --save_summaries_secs=60  --save_interval_secs=600  --weight_decay=0.0005  --optimizer=adam  --learning_rate=0.001  --batch_size=32
+
+Note that in addition to the training script flags, one may also
+want to experiment with data augmentation parameters (random cropping,
+resolution, ...) in `ssd_vgg_preprocessing.py` or/and network parameters
+(feature layers, anchors boxes, ...) in `ssd_vgg_300/512.py`
 
 Furthermore, the training script can be combined with the evaluation routine in order to monitor the performance of saved checkpoints on a validation dataset. For that purpose, one can pass to training and validation scripts a GPU memory upper limit such that both can run in parallel on the same device. If some GPU memory is available for the evaluation script, the former can be run in parallel as follows:
 ```bash
