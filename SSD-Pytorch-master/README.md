@@ -1,173 +1,187 @@
-# SSD: Single Shot MultiBox Object Detector, in PyTorch
-A [PyTorch](http://pytorch.org/) implementation of [Single Shot MultiBox Detector](http://arxiv.org/abs/1512.02325) from the 2016 paper by Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang, and Alexander C. Berg.  The official and original Caffe code can be found [here](https://github.com/weiliu89/caffe/tree/ssd).
+# High quality, fast, modular reference implementation of SSD in PyTorch 1.0
 
 
-<img align="right" src= "https://github.com/amdegroot/ssd.pytorch/blob/master/doc/ssd.png" height = 400/>
+This repository implements [SSD (Single Shot MultiBox Detector)](https://arxiv.org/abs/1512.02325). The implementation is heavily influenced by the projects [ssd.pytorch](https://github.com/amdegroot/ssd.pytorch), [pytorch-ssd](https://github.com/qfgaohao/pytorch-ssd) and [maskrcnn-benchmark](https://github.com/facebookresearch/maskrcnn-benchmark). This repository aims to be the code base for researches based on SSD.
 
-### Table of Contents
-- <a href='#installation'>Installation</a>
-- <a href='#datasets'>Datasets</a>
-- <a href='#training-ssd'>Train</a>
-- <a href='#evaluation'>Evaluate</a>
-- <a href='#performance'>Performance</a>
-- <a href='#demos'>Demos</a>
-- <a href='#todo'>Future Work</a>
-- <a href='#references'>Reference</a>
+<div align="center">
+  <img src="figures/004545.jpg" width="500px" />
+  <p>Example SSD output (vgg_ssd300_voc0712).</p>
+</div>
 
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
+| Losses        | Learning rate | Metrics |
+| :-----------: |:-------------:| :------:|
+| ![losses](figures/losses.png) | ![lr](figures/lr.png) | ![metric](figures/metrics.png) |
 
+## Highlights
+
+- **PyTorch 1.0**: Support PyTorch 1.0 or higher.
+- **Multi-GPU training and inference**: We use `DistributedDataParallel`, you can train or test with arbitrary GPU(s), the training schema will change accordingly.
+- **Modular**: Add your own modules without pain. We abstract `backbone`,`Detector`, `BoxHead`, `BoxPredictor`, etc. You can replace every component with your own code without change the code base. For example, You can add [EfficientNet](https://github.com/lukemelas/EfficientNet-PyTorch) as backbone, just add `efficient_net.py` (ALREADY ADDED) and register it, specific it in the config file, It's done!
+- **CPU support for inference**: runs on CPU in inference time.
+- **Smooth and enjoyable training procedure**: we save the state of model, optimizer, scheduler, training iter, you can stop your training and resume training exactly from the save point without change your training `CMD`.
+- **Batched inference**: can perform inference using multiple images per batch per GPU.
+- **Evaluating during training**: eval you model every `eval_step` to check performance improving or not.
+- **Metrics Visualization**: visualize metrics details in tensorboard, like AP, APl, APm and APs for COCO dataset or mAP and 20 categories' AP for VOC dataset.
+- **Auto download**: load pre-trained weights from URL and cache it.
 ## Installation
-- Install [PyTorch](http://pytorch.org/) by selecting your environment on the website and running the appropriate command.
-- Clone this repository.
-  * Note: We currently only support Python 3+.
-- Then download the dataset by following the [instructions](#datasets) below.
-- We now support [Visdom](https://github.com/facebookresearch/visdom) for real-time loss visualization during training!
-  * To use Visdom in the browser:
-  ```Shell
-  # First install Python server and client
-  pip install visdom
-  # Start the server (probably in a screen or tmux)
-  python -m visdom.server
-  ```
-  * Then (during training) navigate to http://localhost:8097/ (see the Train section below for training details).
-- Note: For training, we currently support [VOC](http://host.robots.ox.ac.uk/pascal/VOC/) and [COCO](http://mscoco.org/), and aim to add [ImageNet](http://www.image-net.org/) support soon.
+### Requirements
 
-## Datasets
-To make things easy, we provide bash scripts to handle the dataset downloads and setup for you.  We also provide simple dataset loaders that inherit `torch.utils.data.Dataset`, making them fully compatible with the `torchvision.datasets` [API](http://pytorch.org/docs/torchvision/datasets.html).
+1. Python3
+1. PyTorch 1.0 or higher
+1. yacs
+1. [Vizer](https://github.com/lufficc/Vizer)
+1. GCC >= 4.9
+1. OpenCV
 
 
-### COCO
-Microsoft COCO: Common Objects in Context
+### Step-by-step installation
 
-##### Download COCO 2014
-```Shell
-# specify a directory for dataset to be downloaded into, else default is ~/data/
-sh data/scripts/COCO2014.sh
+```bash
+git clone https://github.com/lufficc/SSD.git
+cd SSD
+# Required packages: torch torchvision yacs tqdm opencv-python vizer
+pip install -r requirements.txt
+
+# Done! That's ALL! No BUILD! No bothering SETUP!
+
+# It's recommended to install the latest release of torch and torchvision.
 ```
 
-### VOC Dataset
-PASCAL VOC: Visual Object Classes
 
-##### Download VOC2007 trainval & test
-```Shell
-# specify a directory for dataset to be downloaded into, else default is ~/data/
-sh data/scripts/VOC2007.sh # <directory>
+## Train
+
+### Setting Up Datasets
+#### Pascal VOC
+
+For Pascal VOC dataset, make the folder structure like this:
+```
+VOC_ROOT
+|__ VOC2007
+    |_ JPEGImages
+    |_ Annotations
+    |_ ImageSets
+    |_ SegmentationClass
+|__ VOC2012
+    |_ JPEGImages
+    |_ Annotations
+    |_ ImageSets
+    |_ SegmentationClass
+|__ ...
+```
+Where `VOC_ROOT` default is `datasets` folder in current project, you can create symlinks to `datasets` or `export VOC_ROOT="/path/to/voc_root"`.
+
+#### COCO
+
+For COCO dataset, make the folder structure like this:
+```
+COCO_ROOT
+|__ annotations
+    |_ instances_valminusminival2014.json
+    |_ instances_minival2014.json
+    |_ instances_train2014.json
+    |_ instances_val2014.json
+    |_ ...
+|__ train2014
+    |_ <im-1-name>.jpg
+    |_ ...
+    |_ <im-N-name>.jpg
+|__ val2014
+    |_ <im-1-name>.jpg
+    |_ ...
+    |_ <im-N-name>.jpg
+|__ ...
+```
+Where `COCO_ROOT` default is `datasets` folder in current project, you can create symlinks to `datasets` or `export COCO_ROOT="/path/to/coco_root"`.
+
+### Single GPU training
+
+```bash
+# for example, train SSD300:
+python train.py --config-file configs/vgg_ssd300_voc0712.yaml
+```
+### Multi-GPU training
+
+```bash
+# for example, train SSD300 with 4 GPUs:
+export NGPUS=4
+python -m torch.distributed.launch --nproc_per_node=$NGPUS train.py --config-file configs/vgg_ssd300_voc0712.yaml SOLVER.WARMUP_FACTOR 0.03333 SOLVER.WARMUP_ITERS 1000
+```
+The configuration files that I provide assume that we are running on single GPU. When changing number of GPUs, hyper-parameter (lr, max_iter, ...) will also changed according to this paper: [Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour](https://arxiv.org/abs/1706.02677).
+
+## Evaluate
+
+### Single GPU evaluating
+
+```bash
+# for example, evaluate SSD300:
+python test.py --config-file configs/vgg_ssd300_voc0712.yaml
 ```
 
-##### Download VOC2012 trainval
-```Shell
-# specify a directory for dataset to be downloaded into, else default is ~/data/
-sh data/scripts/VOC2012.sh # <directory>
+### Multi-GPU evaluating
+
+```bash
+# for example, evaluate SSD300 with 4 GPUs:
+export NGPUS=4
+python -m torch.distributed.launch --nproc_per_node=$NGPUS test.py --config-file configs/vgg_ssd300_voc0712.yaml
 ```
 
-## Training SSD
-- First download the fc-reduced [VGG-16](https://arxiv.org/abs/1409.1556) PyTorch base network weights at:              https://s3.amazonaws.com/amdegroot-models/vgg16_reducedfc.pth
-- By default, we assume you have downloaded the file in the `ssd.pytorch/weights` dir:
+## Demo
 
-```Shell
-mkdir weights
-cd weights
-wget https://s3.amazonaws.com/amdegroot-models/vgg16_reducedfc.pth
+Predicting image in a folder is simple:
+```bash
+python demo.py --config-file configs/vgg_ssd300_voc0712.yaml --images_dir demo --ckpt https://github.com/lufficc/SSD/releases/download/1.2/vgg_ssd300_voc0712.pth
+```
+Then it will download and cache `vgg_ssd300_voc0712.pth` automatically and predicted images with boxes, scores and label names will saved to `demo/result` folder by default.
+
+You will see a similar output:
+```text
+(0001/0005) 004101.jpg: objects 01 | load 010ms | inference 033ms | FPS 31
+(0002/0005) 003123.jpg: objects 05 | load 009ms | inference 019ms | FPS 53
+(0003/0005) 000342.jpg: objects 02 | load 009ms | inference 019ms | FPS 51
+(0004/0005) 008591.jpg: objects 02 | load 008ms | inference 020ms | FPS 50
+(0005/0005) 000542.jpg: objects 01 | load 011ms | inference 019ms | FPS 53
 ```
 
-- To train SSD using the train script simply specify the parameters listed in `train.py` as a flag or manually change them.
+## MODEL ZOO
+### Origin Paper:
 
-```Shell
-python train.py
+|         | VOC2007 test | coco test-dev2015 |
+| :-----: | :----------: |   :----------:    |
+| SSD300* |     77.2     |      25.1         |
+| SSD512* |     79.8     |      28.8         |
+
+### COCO:
+
+| Backbone       | Input Size  |          box AP                  | Model Size |  Download |
+| :------------: | :----------:|   :--------------------------:   | :--------: | :-------: |
+|  VGG16         |     300     |          25.2                    |  262MB     | [model](https://github.com/lufficc/SSD/releases/download/1.2/vgg_ssd300_coco_trainval35k.pth)   |
+|  VGG16         |     512     |          29.0                    |  275MB     | [model](https://github.com/lufficc/SSD/releases/download/1.2/vgg_ssd512_coco_trainval35k.pth)   |
+
+### PASCAL VOC:
+
+| Backbone         | Input Size  |          mAP                     | Model Size | Download  |
+| :--------------: | :----------:|   :--------------------------:   | :--------: | :-------: |
+|  VGG16           |     300     |          77.7                    |   201MB    | [model](https://github.com/lufficc/SSD/releases/download/1.2/vgg_ssd300_voc0712.pth)  |
+|  VGG16           |     512     |          80.7                    |   207MB    | [model](https://github.com/lufficc/SSD/releases/download/1.2/vgg_ssd512_voc0712.pth)  |
+|  Mobilenet V2    |     320     |          68.9                    |   25.5MB   | [model](https://github.com/lufficc/SSD/releases/download/1.2/mobilenet_v2_ssd320_voc0712_v2.pth) |
+|  Mobilenet V3    |     320     |          69.5                    |   29.9MB   | [model](https://github.com/lufficc/SSD/releases/download/1.2/mobilenet_v3_ssd320_voc0712.pth) |
+|  EfficientNet-B3 |     300     |          73.9                    |   97.1MB   | [model](https://github.com/lufficc/SSD/releases/download/1.2/efficient_net_b3_ssd300_voc0712.pth) |
+
+## Develop Guide
+
+If you want to add your custom components, please see [DEVELOP_GUIDE.md](DEVELOP_GUIDE.md) for more details.
+
+
+## Troubleshooting
+If you have issues running or compiling this code, we have compiled a list of common issues in [TROUBLESHOOTING.md](TROUBLESHOOTING.md). If your issue is not present there, please feel free to open a new issue.
+
+## Citations
+If you use this project in your research, please cite this project.
+```text
+@misc{lufficc2018ssd,
+    author = {Congcong Li},
+    title = {{High quality, fast, modular reference implementation of SSD in PyTorch}},
+    year = {2018},
+    howpublished = {\url{https://github.com/lufficc/SSD}}
+}
 ```
-
-- Note:
-  * For training, an NVIDIA GPU is strongly recommended for speed.
-  * For instructions on Visdom usage/installation, see the <a href='#installation'>Installation</a> section.
-  * You can pick-up training from a checkpoint by specifying the path as one of the training parameters (again, see `train.py` for options)
-
-## Evaluation
-To evaluate a trained network:
-
-```Shell
-python eval.py
-```
-
-You can specify the parameters listed in the `eval.py` file by flagging them or manually changing them.  
-
-
-<img align="left" src= "https://github.com/amdegroot/ssd.pytorch/blob/master/doc/detection_examples.png">
-
-## Performance
-
-#### VOC2007 Test
-
-##### mAP
-
-| Original | Converted weiliu89 weights | From scratch w/o data aug | From scratch w/ data aug |
-|:-:|:-:|:-:|:-:|
-| 77.2 % | 77.26 % | 58.12% | 77.43 % |
-
-##### FPS
-**GTX 1060:** ~45.45 FPS
-
-## Demos
-
-### Use a pre-trained SSD network for detection
-
-#### Download a pre-trained network
-- We are trying to provide PyTorch `state_dicts` (dict of weight tensors) of the latest SSD model definitions trained on different datasets.  
-- Currently, we provide the following PyTorch models:
-    * SSD300 trained on VOC0712 (newest PyTorch weights)
-      - https://s3.amazonaws.com/amdegroot-models/ssd300_mAP_77.43_v2.pth
-    * SSD300 trained on VOC0712 (original Caffe weights)
-      - https://s3.amazonaws.com/amdegroot-models/ssd_300_VOC0712.pth
-- Our goal is to reproduce this table from the [original paper](http://arxiv.org/abs/1512.02325)
-<p align="left">
-<img src="http://www.cs.unc.edu/~wliu/papers/ssd_results.png" alt="SSD results on multiple datasets" width="800px"></p>
-
-### Try the demo notebook
-- Make sure you have [jupyter notebook](http://jupyter.readthedocs.io/en/latest/install.html) installed.
-- Two alternatives for installing jupyter notebook:
-    1. If you installed PyTorch with [conda](https://www.continuum.io/downloads) (recommended), then you should already have it.  (Just  navigate to the ssd.pytorch cloned repo and run):
-    `jupyter notebook`
-
-    2. If using [pip](https://pypi.python.org/pypi/pip):
-
-```Shell
-# make sure pip is upgraded
-pip3 install --upgrade pip
-# install jupyter notebook
-pip install jupyter
-# Run this inside ssd.pytorch
-jupyter notebook
-```
-
-- Now navigate to `demo/demo.ipynb` at http://localhost:8888 (by default) and have at it!
-
-### Try the webcam demo
-- Works on CPU (may have to tweak `cv2.waitkey` for optimal fps) or on an NVIDIA GPU
-- This demo currently requires opencv2+ w/ python bindings and an onboard webcam
-  * You can change the default webcam in `demo/live.py`
-- Install the [imutils](https://github.com/jrosebr1/imutils) package to leverage multi-threading on CPU:
-  * `pip install imutils`
-- Running `python -m demo.live` opens the webcam and begins detecting!
-
-## TODO
-We have accumulated the following to-do list, which we hope to complete in the near future
-- Still to come:
-  * [x] Support for the MS COCO dataset
-  * [ ] Support for SSD512 training and testing
-  * [ ] Support for training on custom datasets
-
-## Authors
-
-* [**Max deGroot**](https://github.com/amdegroot)
-* [**Ellis Brown**](http://github.com/ellisbrown)
-
-***Note:*** Unfortunately, this is just a hobby of ours and not a full-time job, so we'll do our best to keep things up to date, but no guarantees.  That being said, thanks to everyone for your continued help and feedback as it is really appreciated. We will try to address everything as soon as possible.
-
-## References
-- Wei Liu, et al. "SSD: Single Shot MultiBox Detector." [ECCV2016]((http://arxiv.org/abs/1512.02325)).
-- [Original Implementation (CAFFE)](https://github.com/weiliu89/caffe/tree/ssd)
-- A huge thank you to [Alex Koltun](https://github.com/alexkoltun) and his team at [Webyclip](http://www.webyclip.com) for their help in finishing the data augmentation portion.
-- A list of other great SSD ports that were sources of inspiration (especially the Chainer repo):
-  * [Chainer](https://github.com/Hakuyume/chainer-ssd), [Keras](https://github.com/rykov8/ssd_keras), [MXNet](https://github.com/zhreshold/mxnet-ssd), [Tensorflow](https://github.com/balancap/SSD-Tensorflow)
