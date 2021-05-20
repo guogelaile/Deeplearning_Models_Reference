@@ -1,13 +1,24 @@
 ## Backbone networks
 **vgg**  
+tensorflow：https://github.com/machrisaa/tensorflow-vgg  
 
 **resnet**  
+tensorflow：https://github.com/ry/tensorflow-resnet  
+
+**roi-pooling**  
+https://github.com/deepsense-ai/roi-pooling  
 
 **FCN**  
+tensorflow：https://github.com/shekkizh/FCN.tensorflow  
+pytorch：https://github.com/wkentaro/pytorch-fcn  
 
 **PSPNet**  
+pytorch：https://github.com/hszhao/PSPNet  
+tensorflow：https://github.com/hellochick/PSPNet-tensorflow  
 
 **densenet**  
+tensorflow：https://github.com/hellochick/PSPNet-tensorflow  
+pytorch：https://github.com/gpleiss/efficient_densenet_pytorch  
 
 **Squeezenet**  
 pytorch：[https://github.com/gsp-27/pytorch_Squeezenet](https://github.com/gsp-27/pytorch_Squeezenet)  
@@ -25,12 +36,8 @@ tensorflow：[https://github.com/Bisonai/mobilenetv3-tensorflow](https://github.
 **MobileNet-v2**  
 pytorch：[https://github.com/tonylins/pytorch-mobilenet-v2](https://github.com/tonylins/pytorch-mobilenet-v2)  
 
-**RCNN**  
-
 **SPP-Net**  
-
-**fast-rcnn**  
-
+pytorch：https://github.com/yueruchen/sppnet-pytorch
 
 **faster-rcnn**  
 tensorflow：[https://github.com/smallcorgi/Faster-RCNN_TF](https://github.com/smallcorgi/Faster-RCNN_TF)  
@@ -165,6 +172,8 @@ tensorflow：[https://github.com/srihari-humbarwadi/FastFCN_TF2.0](https://githu
 **DFANet**  
 pytorch：[https://github.com/huaifeng1993/DFANet](https://github.com/huaifeng1993/DFANet)  
 
+**PanopticFCN**
+https://github.com/dvlab-research/PanopticFCN
 
 ## Annotation tool
 **1、labelme**  
