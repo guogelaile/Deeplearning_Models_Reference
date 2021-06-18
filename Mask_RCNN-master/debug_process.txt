@@ -1,0 +1,57 @@
+
+第一步（如果不进行这一步会存在找不到mrcnn的情况）：
+python setup.py install
+
+
+ballon例子测试：
+python  ./samples/balloon/balloon.py splash --weights=./mask_rcnn_balloon.h5 --image=./datasets/balloon/val/5555705118_3390d70abe_b.jpg
+python ./samples/balloon/balloon.py train --dataset=./datasets/balloon --weights=./mask_rcnn_balloon.h5
+python ./samples/oilSeal/oilSeal.py train --dataset=./datasets/oilSeal --weights=imagenet
+python ./samples/oilSeal/oilSeal.py splash --weights=./mask_rcnn_oilseal_0010.h5 --image=./datasets/oilSeal/val/canliao-5.bmp
+
+coco例子测试：
+python demo.py
+
+windows端编译
+安装pycocotools
+cocoapi\PythonAPI 目录
+依次运行：
+python setup.py build_ext --inplace
+python setup.py build_ext install
+进入 Python shell，输入以下命令，验证 pycocotools 是否安装成功：
+from pycocotools.coco import COCO
+from pycocotools import mask
+
+将samples/demo.ipynb通过jupyter notebook导出成.py文件
+
+
+bug1：
+coco编译错误：cl: 命令行 error D8021 :无效的数值参数“/Wno-cpp”
+解决办法：https://blog.csdn.net/weixin_41010198/article/details/94053130
+改为如下：extra_compile_args=['-std=c99']
+
+bug2：
+错误： module 'coco' has no attribute 'CocoConfig'
+解决办法：cd到samples目录下，执行命令：python demo.py
+
+bug3：运行mask rcnn训练代码 程序在Epoch 1/20时出现程序挂起现象 解决办法
+解决办法：将keras版本修正为2.1.6即可，打开cmd,输入下面代码
+pip install keras==2.1.6 -i https://mirrors.aliyun.com/pypi/simple/
+参考链接：https://blog.csdn.net/weixin_44573410/article/details/103995900
+
+bug4：linux端gpu运行错误
+ImportError: libGL.so.1: cannot open shared object file: No such file or directory
+新容器缺少依赖，安装一下就行了
+apt update
+apt install libgl1-mesa-glx
+解决办法：https://felaim.blog.csdn.net/article/details/108726908
+
+bug5：'str' object has no attribute 'decode'
+将print ('张三'.decode('utf-8')) //错误
+改为print ('张三'.encode('utf-8').decode('utf-8')) //正确
+
+nucleus测试：
+python ./samples/nucleus/nucleus.py train --dataset=./datasets/nucleus/ --subset=train --weights=imagenet
+python ./samples/nucleus/nucleus.py detect --dataset=./datasets/nucleus/ --subset=stage1_test --weights=mask_rcnn_nucleus_0011.h5
+python ./samples/nucleus/inspect_nucleus_model.py
+python ./samples/nucleus/inspect_nucleus_data.py
